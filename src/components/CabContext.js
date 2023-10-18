@@ -27,30 +27,28 @@ const CabContextProvider = ({ children }) => {
 
   const handleClick = () => {
     setLoading(true);
- 
+  
     const isDefault = (str) => {
-      return str.split(" ").includes("(any)");
+      return str.includes("(any)");
     };
-    
-
+  
     const newCab = cabData.filter((cab) => {
-    
-      if (cab.type === cab) {
-        return cab;
+      if (type === "Type (any)") {
+        return true; 
+      } else if (cab.type === type) {
+        return true; 
+      } else if (isDefault(type)) {
+        return cab.type.includes(type.split(" ")[0]);
       }
-      //if all values are default
-      if (isDefault(cab)) {
-        return cab;
-      }
+      return false; 
     });
-
-    console.log(newCab);
+  
     setTimeout(() => {
-      return newCab.length < 1 ? setCabs([]) : setCabs(newCab), 
-      setLoading(false)
+      setCabs(newCab);
+      setLoading(false);
     }, 1000);
   };
-
+  
   return (
     <CabContext.Provider
       value={{
