@@ -9,6 +9,7 @@ import ConfirmationModal from "../components/ConfirmatiomModal";
 
 const BookingDetails = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [passengerCount, setPassengerCount] = useState(1);
 
   const form = useRef();
   const { id } = useParams();
@@ -16,12 +17,19 @@ const BookingDetails = () => {
     return cab.id === parseInt(id);
   });
 
+  const handlePassengerCountChange = (event) => {
+    const count = event.target.value;
+    setPassengerCount(count);
+  };
+
+
   const closeModal = () => {
     setModalOpen(false);
   };
 
   const sendEmail = (e) => {
     e.preventDefault();
+    const totalAmount = car.price * passengerCount;
 
     emailjs
       .sendForm(
@@ -110,6 +118,15 @@ const BookingDetails = () => {
               />
               <input
                 className="border border-gray-300 focus:border-violet-700 outline-none rounded w-full px-4 h-14 text-sm"
+                type="number"
+                name="user_count"
+                placeholder="Passenger count"
+                min={1}
+                value={passengerCount}
+                onChange={handlePassengerCountChange}
+              />
+              <input
+                className="border border-gray-300 focus:border-violet-700 outline-none rounded w-full px-4 h-14 text-sm"
                 type="text"
                 name="card_number"
                 placeholder="Card Number*"
@@ -142,7 +159,7 @@ const BookingDetails = () => {
                   type="text"
                   name="user_amount"
                   className="text-xl font-semibold text-gray-800 border border-none px-2 py-1 rounded"
-                  value={`Total: $${car.price}`}
+                  value={`Total: $${car.price * passengerCount}`}
                   readOnly
                 />
               </div>
